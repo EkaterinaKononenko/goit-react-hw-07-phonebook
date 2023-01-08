@@ -1,8 +1,8 @@
 import { ContactText, ContactButton } from './Contact.styled';
 import { useDispatch } from 'react-redux';
-import { deleteContact } from '../../redux/myValue/slice';
+import { deleteContact } from '../../redux/operations';
 
-export const Contact = ({ id, name, number}) => {
+export const Contact = ({ id, name, number }) => {
   const dispatch = useDispatch();
   return (
     <ContactText key={id}>
@@ -13,5 +13,3 @@ export const Contact = ({ id, name, number}) => {
     </ContactText>
   );
 };
-
-

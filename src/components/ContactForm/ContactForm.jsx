@@ -10,7 +10,8 @@ import {
   BtnAddContact,
 } from './ContactForm.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from '../../redux/myValue/slice';
+import { addContact } from '../../redux/operations';
+import { selectContacts } from '../../redux/selectors';
 
 const nanoid = customAlphabet('1234567890abcdef', 10);
 
@@ -42,24 +43,22 @@ const initualValues = {
 };
 
 export const ContactForm = () => {
-  const dispatch = useDispatch(); 
-  const contacts = useSelector(state => state.contacts.contacts)
+  const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts);
 
-        const handleSubmit = (values, { resetForm }) => {
-          const newContact = {
-            id: 'id-' + nanoid(),
-            name: values.name,
-            number: values.number,
-          };
+  const handleSubmit = (values, { resetForm }) => {
+    const newContact = {
+      id: 'id-' + nanoid(),
+      name: values.name,
+      number: values.number,
+    };
 
-          if (contacts.some(contact => contact.name === newContact.name)) {
-            return alert(
-              `Contact ${newContact.name} has already been registrated.`
-            );
-          }
-          dispatch(addContact(newContact));
-          resetForm();
-        };
+    if (contacts.some(contact => contact.name === newContact.name)) {
+      return alert(`Contact ${newContact.name} has already been registrated.`);
+    }
+    dispatch(addContact(newContact));
+    resetForm();
+  };
 
   return (
     <Formik
@@ -67,7 +66,7 @@ export const ContactForm = () => {
       validationSchema={schema}
       onSubmit={handleSubmit}
     >
-      <FormReg autoComplete="off">
+      <FormReg>
         <LabelForm htmlFor="name">
           Name
           <Input type="text" name="name" id="name"/>
@@ -89,4 +88,3 @@ export const ContactForm = () => {
     </Formik>
   );
 };
-

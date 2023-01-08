@@ -2,20 +2,28 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Contact } from '../Contact/Contact';
 import { ContactListWrap } from './ContactList.styled';
-import { useSelector} from 'react-redux';
-
-
+import { useDispatch, useSelector } from 'react-redux';
+import { selectValueFilter, selectContacts } from '../../redux/selectors';
+import { useEffect } from 'react';
+import { fetchContacts } from '../../redux/operations';
 
 export const ContactList = () => {
-  const contacts = useSelector(state => state.contacts.contacts);
-  const filter = useSelector(state => state.contacts.filter);
+  const contacts = useSelector(selectContacts);
+  const filter = useSelector(selectValueFilter);
+  const dispatch = useDispatch();
 
- const filteredContacts = filter
+  useEffect(() => {
+    dispatch(fetchContacts())
+  },[dispatch])
+  
+  console.log(contacts);
+
+  const filteredContacts = filter
     ? contacts.filter(({ name }) =>
         name.toLowerCase().includes(filter.toLowerCase().trim())
       )
     : contacts;
-  
+
   return (
     <ContactListWrap>
       {filteredContacts.map(({ id, name, number }) => {
